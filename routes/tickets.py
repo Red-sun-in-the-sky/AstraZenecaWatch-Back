@@ -8,14 +8,14 @@ import json
 tickets_router = APIRouter(prefix="/tickets")
 
 
-@tickets_router.post("/")
+@tickets_router.post("")
 async def update_tickets(tickets: List[Ticket], redis: aioredis.Redis = Depends(get_redis)):
     for ticket in tickets:
         await redis.set(ticket.number, ticket.json())
     return {"message": "Tickets updated"}
 
 
-@tickets_router.get("/", response_model=List[Ticket])
+@tickets_router.get("", response_model=List[Ticket])
 async def get_tickets(redis: aioredis.Redis = Depends(get_redis)) -> List[Ticket]:
     keys = await redis.keys("INC*")
     tickets = []

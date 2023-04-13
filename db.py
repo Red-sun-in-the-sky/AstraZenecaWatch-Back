@@ -1,13 +1,7 @@
 import aioredis
-from config import settings
 
-
-async def get_redis():
-    redis = await aioredis.create_redis_pool(
-        f"redis://{settings.redis_host}:{settings.redis_port}"
+def get_redis():
+    redis = aioredis.from_url(
+        "redis://localhost", encoding="utf-8", decode_responses=True
     )
-    try:
-        yield redis
-    finally:
-        redis.close()
-        await redis.wait_closed()
+    return redis
